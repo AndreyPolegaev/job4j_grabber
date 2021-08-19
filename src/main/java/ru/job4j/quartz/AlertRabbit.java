@@ -2,6 +2,8 @@ package ru.job4j.quartz;
 
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -29,6 +31,19 @@ public class AlertRabbit {
         }
     }
 
+    private static int getProperties() {
+        int time = 0;
+        try (InputStream in = AlertRabbit.class.getClassLoader().getResourceAsStream("rabbit.properties")) {
+            Properties config = new Properties();
+            config.load(in);
+            time = Integer.parseInt(config.getProperty("rabbit.interval"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return time;
+    }
+
+
     public static void main(String[] args) {
         init();
         try {
@@ -40,7 +55,7 @@ public class AlertRabbit {
                     .usingJobData(data)
                     .build();
             SimpleScheduleBuilder times = simpleSchedule()
-                    .withIntervalInSeconds(5)
+                    .withIntervalInSeconds(getProperties())
                     .repeatForever();
             Trigger trigger = newTrigger()
                     .startNow()
