@@ -15,6 +15,14 @@ public class Post {
 
     private LocalDateTime created;
 
+    public Post(int id, String title, String link, String description, LocalDateTime created) {
+        this.id = id;
+        this.title = title;
+        this.link = link;
+        this.description = description;
+        this.created = created;
+    }
+
     public int getId() {
         return id;
     }
@@ -35,6 +43,10 @@ public class Post {
         return created;
     }
 
+    public void setId(int id)  {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -47,12 +59,23 @@ public class Post {
         return id == post.id
                 && Objects.equals(title, post.title)
                 && Objects.equals(link, post.link)
-                && Objects.equals(description, post.description)
                 && Objects.equals(created, post.created);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, link, description, created);
+        return Objects.hash(id, title, link, created);
+    }
+
+    @Override
+    public String toString() {
+        String ln = System.lineSeparator();
+
+        return
+                 "id: " + id + ln
+               + "title: " + title + ln
+               + "link: " + link + ln
+               + "description: " + description + ln
+               + "created: " + created;
     }
 }

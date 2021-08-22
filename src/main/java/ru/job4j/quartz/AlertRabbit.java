@@ -2,8 +2,6 @@ package ru.job4j.quartz;
 
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
-
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -15,11 +13,13 @@ import static org.quartz.SimpleScheduleBuilder.*;
 public class AlertRabbit {
 
     private static Connection cn;
+    private static int time;
 
     private static void init() {
         try (InputStream in = AlertRabbit.class.getClassLoader().getResourceAsStream("rabbit.properties")) {
             Properties config = new Properties();
             config.load(in);
+            time = Integer.parseInt(config.getProperty("rabbit.interval"));
             Class.forName(config.getProperty("driver-class-name"));
             cn = DriverManager.getConnection(
                     config.getProperty("url"),
@@ -30,19 +30,6 @@ public class AlertRabbit {
             throw new IllegalStateException(e);
         }
     }
-
-    private static int getProperties() {
-        int time = 0;
-        try (InputStream in = AlertRabbit.class.getClassLoader().getResourceAsStream("rabbit.properties")) {
-            Properties config = new Properties();
-            config.load(in);
-            time = Integer.parseInt(config.getProperty("rabbit.interval"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return time;
-    }
-
 
     public static void main(String[] args) {
         init();
@@ -55,7 +42,7 @@ public class AlertRabbit {
                     .usingJobData(data)
                     .build();
             SimpleScheduleBuilder times = simpleSchedule()
-                    .withIntervalInSeconds(getProperties())
+                    .withIntervalInSeconds(time)
                     .repeatForever();
             Trigger trigger = newTrigger()
                     .startNow()
