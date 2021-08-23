@@ -23,8 +23,8 @@ public class Post {
         this.created = created;
     }
 
-    public Post(String title) {
-        this.title = title;
+    public Post(String link) {
+        this.link = link;
     }
 
     public int getId() {
