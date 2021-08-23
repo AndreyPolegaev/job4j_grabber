@@ -23,6 +23,10 @@ public class Post {
         this.created = created;
     }
 
+    public Post(String title) {
+        this.title = title;
+    }
+
     public int getId() {
         return id;
     }
