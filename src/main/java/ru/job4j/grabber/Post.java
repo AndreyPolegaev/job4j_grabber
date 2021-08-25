@@ -47,7 +47,7 @@ public class Post {
         return created;
     }
 
-    public void setId(int id)  {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -74,12 +74,10 @@ public class Post {
     @Override
     public String toString() {
         String ln = System.lineSeparator();
-
-        return
-                 "id: " + id + ln
-               + "title: " + title + ln
-               + "link: " + link + ln
-               + "description: " + description + ln
-               + "created: " + created;
+        return "id: " + id + ln
+                + "title: " + title + ln
+                + "link: " + link + ln
+                + "description: " + description + ln
+                + "created: " + created;
     }
 }

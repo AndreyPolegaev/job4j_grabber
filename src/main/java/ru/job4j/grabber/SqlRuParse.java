@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,34 +27,12 @@ public class SqlRuParse implements Parse {
             Elements row = doc.select(".postslisttopic");
             for (Element td : row) {
                 Element href = td.child(0);
-                // System.out.println(href.attr("href"));
                 sqlRuParse.list(href.attr("href"));
-                /*
-                 System.out.println(String.format("Вакансия: %s, Дата создания: %s", href.text(), td.parent().child(5).text()));
-                DateTimeFormatter formatter = DateTimeFormatter.o fPattern("dd-MM-yy HH:mm");
-                SqlRuDateTimeParser sqlRuDateTimeParser = new SqlRuDateTimeParser();
-                LocalDateTime localDateTime = sqlRuDateTimeParser.parse(td.parent().child(5).text());
-                System.out.println(formatter.format(localDateTime));
-                */
                 System.out.println("_".repeat(80));
             }
         }
     }
 
-
-//    public static List<Post> getDescription(String link) throws IOException {
-//        Document doc = Jsoup.connect(link).get();
-//        Element title = doc.select(".messageHeader").get(0);
-//        Element description = doc.select(".msgBody").get(1);
-//        Element dateTimeSite = doc.select(".msgFooter").get(0);
-//        SqlRuDateTimeParser sqlRuParse = new SqlRuDateTimeParser();
-//        LocalDateTime localDateTime = sqlRuParse.parse(dateTimeSite.text());
-//        List<Post> listDesc = new ArrayList<>();
-//        listDesc.add(new Post(0, title.text(), link, description.text(), localDateTime));
-//        return listDesc;
-//    }
-
-    //загружает список всех постов
     @Override
     public List<Post> list(String link) throws IOException {
         Document doc = Jsoup.connect(link).get();
@@ -62,7 +41,6 @@ public class SqlRuParse implements Parse {
         return listDesc;
     }
 
-    //загружает детали одного поста
     @Override
     public Post detail(String link) throws IOException {
         Document doc = Jsoup.connect(link).get();
