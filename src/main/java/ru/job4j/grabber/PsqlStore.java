@@ -11,18 +11,13 @@ public class PsqlStore implements Store, AutoCloseable {
 
     private Connection cnn;
 
-    public PsqlStore(Properties cfg) {
-        try (InputStream in = PsqlStore.class.getClassLoader().getResourceAsStream("app.properties")) {
-            cfg.load(in);
+    public PsqlStore(Properties cfg) throws ClassNotFoundException, SQLException {
             Class.forName(cfg.getProperty("driver-class-name"));
             cnn = DriverManager.getConnection(
                     cfg.getProperty("url"),
                     cfg.getProperty("username"),
                     cfg.getProperty("password")
             );
-        } catch (Exception e) {
-            throw new IllegalStateException(e);
-        }
     }
 
     @Override
@@ -98,7 +93,7 @@ public class PsqlStore implements Store, AutoCloseable {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
         Properties config = new Properties();
         PsqlStore psqlStore = new PsqlStore(config);
         psqlStore.save(

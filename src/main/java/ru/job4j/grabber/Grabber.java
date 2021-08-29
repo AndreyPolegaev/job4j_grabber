@@ -6,15 +6,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
-
 import static org.quartz.JobBuilder.newJob;
 import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
@@ -23,7 +21,7 @@ public class Grabber implements Grab {
 
     private final Properties cfg = new Properties();
 
-    public Store store() {
+    public Store store() throws SQLException, ClassNotFoundException {
         return new PsqlStore(cfg);
     }
 
@@ -34,7 +32,7 @@ public class Grabber implements Grab {
     }
 
     public void cfg() throws IOException {
-        try (InputStream in = PsqlStore.class.getClassLoader().getResourceAsStream("app.properties")) {
+        try (InputStream in = Grabber.class.getClassLoader().getResourceAsStream("app.properties")) {
             cfg.load(in);
         }
     }
@@ -62,7 +60,6 @@ public class Grabber implements Grab {
         @Override
         public void execute(JobExecutionContext context) throws JobExecutionException {
             JobDataMap map = context.getJobDetail().getJobDataMap();
-            List<Post> getData = new ArrayList<>();
             Store store = (Store) map.get("store");
             Parse parse = (Parse) map.get("parse");
             for (int i = 1; i <= 5; i++) {
@@ -75,16 +72,15 @@ public class Grabber implements Grab {
                 Elements row = doc.select(".postslisttopic");
                 for (Element td : row) {
                     Element href = td.child(0);
-                    getData.add(new Post(href.attr("href")));
+                    try {
+                        List<Post> saveLink = parse.list(href.attr("href"));
+                        store.save(parse.detail(saveLink.get(0).getLink()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+
             }
-            getData.forEach(e -> {
-                try {
-                    store.save(parse.detail(e.getLink()));
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            });
         }
     }
 
