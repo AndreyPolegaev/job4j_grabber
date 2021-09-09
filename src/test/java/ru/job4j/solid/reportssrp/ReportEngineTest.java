@@ -143,6 +143,4 @@ public class ReportEngineTest {
                 .append(100.0).append(";");
         assertThat(engine.generate(em -> true), is(expect.toString()));
     }
-
-
 }
