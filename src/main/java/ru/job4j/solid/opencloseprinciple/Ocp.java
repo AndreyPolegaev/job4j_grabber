@@ -10,6 +10,7 @@ public class Ocp {
 
     /**
      * Example 1
+     *
      */
     private static class WrongPerson {
 
