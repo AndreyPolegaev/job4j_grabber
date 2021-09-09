@@ -1,7 +1,5 @@
 package ru.job4j.solid.opencloseprinciple;
 
-import ru.job4j.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
