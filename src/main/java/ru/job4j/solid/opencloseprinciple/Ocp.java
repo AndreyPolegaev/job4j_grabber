@@ -10,7 +10,6 @@ public class Ocp {
 
     /**
      * Example 1
-     *
      */
     private static class WrongPerson {
 
@@ -41,14 +40,14 @@ public class Ocp {
         T makeReport();
     }
 
-    private static class RightPerson1 implements Test.Report<String> {
+    private static class RightPerson1 implements Report<String> {
         @Override
         public String makeReport() {
             return "do something...";
         }
     }
 
-    private static class RightPerson2 implements Test.Report<List<String>> {
+    private static class RightPerson2 implements Report<List<String>> {
         @Override
         public List<String> makeReport() {
             return new ArrayList<>();
@@ -74,7 +73,7 @@ public class Ocp {
         K executeOut(T t);
     }
 
-    private static class RightData<T> implements Test.Store<Predicate<String>, String> {
+    private static class RightData<T> implements Store<Predicate<String>, String> {
 
         List<T> list;
 
