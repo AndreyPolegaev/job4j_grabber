@@ -1,7 +1,8 @@
 package ru.job4j.tdd;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.*;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import java.util.Arrays;
@@ -43,5 +44,35 @@ public class CinemaTest {
                 new Session4D(),
                 new Session5D()
         )));
+    }
+
+    @Ignore
+    @Test
+    public void whenWrongPlaceSameData() {
+        Cinema cinema = new Cinema3D();
+        cinema.add(new Session3D());
+        Account account1 = new AccountCinema();
+        Calendar date = Calendar.getInstance();
+        date.set(2020, 10, 10, 23, 00);
+        Account account2 = new AccountCinema();
+        Calendar date2 = Calendar.getInstance();
+        date2.set(2020, 10, 10, 23, 00);
+        Ticket ticket1 = cinema.buy(account1, 1, 1, date);
+        Ticket ticket2 = cinema.buy(account2, 1, 1, date);
+        assertThat(ticket1, is(ticket2));
+    }
+
+    @Ignore
+    @Test
+    public void whenWrongData() {
+        Cinema cinema = new Cinema3D();
+        cinema.add(new Session3D());
+        Account account1 = new AccountCinema();
+        Calendar dateOrder = Calendar.getInstance();
+        dateOrder.set(2021, 9, 14, 23, 00);
+        Calendar today = Calendar.getInstance();
+        today.set(2021, 9, 15, 23, 00);
+        Ticket ticket1 = cinema.buy(account1, 1, 1, dateOrder);
+        assertNotEquals(dateOrder, today);
     }
 }
