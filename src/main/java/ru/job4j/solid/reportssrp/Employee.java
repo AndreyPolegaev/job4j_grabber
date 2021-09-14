@@ -11,16 +11,15 @@ import java.util.Objects;
  * Employee model
  */
 
-@XmlRootElement(name = "employee")
-@XmlAccessorType(XmlAccessType.FIELD)
+
 public class Employee {
-    @XmlAttribute
+
     private String name;
 
     private Calendar hired;
 
     private Calendar fired;
-    @XmlAttribute
+
     private double salary;
 
     public Employee(String name, Calendar hired, Calendar fired, double salary) {

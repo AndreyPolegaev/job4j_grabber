@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import java.util.Calendar;
 
+import java.util.List;
 import java.util.function.Predicate;
 
 public class JsonReport implements Report {
@@ -17,12 +18,9 @@ public class JsonReport implements Report {
 
     @Override
     public String generate(Predicate<Employee> filter) {
+        List<Employee> employees = store.findBy(filter);
         Gson gson = new GsonBuilder().create();
-        StringBuilder sb = new StringBuilder();
-        for (Employee temp : store.findBy(filter)) {
-            sb.append(gson.toJson(temp));
-        }
-        return sb.toString();
+        return gson.toJson(employees);
     }
 
     public static void main(String[] args) {
