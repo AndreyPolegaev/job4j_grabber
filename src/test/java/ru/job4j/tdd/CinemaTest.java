@@ -47,7 +47,7 @@ public class CinemaTest {
     }
 
     @Ignore
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void whenWrongPlaceSameData() {
         Cinema cinema = new Cinema3D();
         cinema.add(new Session3D());
@@ -63,7 +63,7 @@ public class CinemaTest {
     }
 
     @Ignore
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void whenWrongData() {
         Cinema cinema = new Cinema3D();
         cinema.add(new Session3D());
