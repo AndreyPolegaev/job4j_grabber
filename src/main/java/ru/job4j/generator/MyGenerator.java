@@ -10,11 +10,11 @@ public class MyGenerator implements Generator {
             if (template.contains(temp)) {
                 template = template.replace("${" + temp + "}", args.get(temp));
             } else {
-                throw new UnsupportedOperationException("string doesn't this key word");
+                throw new IllegalArgumentException("string doesn't this key word");
             }
         }
         if (template.contains("$")) {
-            throw new UnsupportedOperationException("Key is absent");
+            throw new IllegalArgumentException("Key is absent");
         }
         return template;
     }

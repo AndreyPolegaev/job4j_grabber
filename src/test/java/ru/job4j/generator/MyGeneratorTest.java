@@ -18,7 +18,7 @@ public class MyGeneratorTest {
         assertThat(produce, is("I am a Petr Arsentev, Who are you? "));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenStringDoesNotHaveKey() {
         Generator gen = new MyGenerator();
         String produce = gen.produce("I am a ${name}, Who are ${subject}? ", new HashMap<>(Map.of(
@@ -29,7 +29,7 @@ public class MyGeneratorTest {
         assertThat(produce, is("I am a Petr Arsentev, Who are you? "));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void whenHashMapDoesNotHaveStringsKey() {
         Generator gen = new MyGenerator();
         String produce = gen.produce("I am a ${name}, Who are ${subject}? ${absent} ", new HashMap<>(Map.of(
