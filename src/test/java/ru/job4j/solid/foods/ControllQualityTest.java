@@ -9,116 +9,81 @@ import static org.junit.Assert.*;
 public class ControllQualityTest {
 
     @Test
-    public void whenAddToTheWarehouse() {
-        Food milk = new Food(
-                "Milk Parmalat",
+    public void whenTestDateParserThenForShop() {
+        DateCompare dateCompare = new DateCompare();
+        float value = dateCompare.dateCompare(
                 LocalDate.of(2021, 9, 1),
-                LocalDate.of(2022, 9, 30),
-                100);
-        Control cq = new ControllQuality();
-        Store expected = cq.exChange(milk);
-        Store shop = Warehouse.getInstance();
-        assertThat(expected.getData().get(0), is(shop.getData().get(0)));
-        assertThat(expected.getData().get(0).getPrice(), is(100.0F));
-        shop.clear();
+                LocalDate.of(2021, 9, 30));
+        assertTrue(value > 25.0 && value < 100);
     }
 
     @Test
-    public void whenAddToTheShop() {
-        Food milk = new Food(
-                "Milk Parmalat",
+    public void whenTestDateParserThenForWarehouse() {
+        DateCompare dateCompare = new DateCompare();
+        float value = dateCompare.dateCompare(
                 LocalDate.of(2021, 9, 1),
-                LocalDate.of(2021, 10, 1),
-                100);
-        Control cq = new ControllQuality();
-        Store expected = cq.exChange(milk);
-        Store shop = Shop.getInstance();
-        assertThat(expected.getData().get(0), is(shop.getData().get(0)));
-        assertThat(expected.getData().get(0).getPrice(), is(100.0F));
-        shop.clear();
-
+                LocalDate.of(2022, 9, 30));
+        assertTrue(value < 25.0);
     }
 
     @Test
-    public void whenAddToTheShopWithDiscount() {
-        Food milk = new Food(
-                "Milk Parmalat",
+    public void whenTestDateParserThenForTrash() {
+        DateCompare dateCompare = new DateCompare();
+        float value = dateCompare.dateCompare(
                 LocalDate.of(2021, 9, 1),
-                LocalDate.of(2021, 9, 16),
-                100);
-        Control cq = new ControllQuality();
-        Store expected = cq.exChange(milk);
-        Store shop = Shop.getInstance();
-        assertThat(expected.getData().get(0), is(shop.getData().get(0)));
-        assertThat(expected.getData().get(0).getPrice(), is(50.0F));
-        shop.clear();
+                LocalDate.of(2021, 9, 10));
+        assertTrue(value >= 100.0);
     }
 
     @Test
-    public void whenAddToTheTrash() {
-        Food milk = new Food(
-                "Milk Parmalat",
-                LocalDate.of(2021, 9, 1),
+    public void whenGoodsDividedIntoThreeStore() {
+        Food milk1 = new Food("milk1",
                 LocalDate.of(2021, 9, 10),
-                100);
-        Control cq = new ControllQuality();
-        Store expected = cq.exChange(milk);
-        Store trash = Trash.getInstance();
-        assertThat(expected.getData().get(0), is(trash.getData().get(0)));
-        trash.clear();
-    }
+                LocalDate.of(2022, 5, 15), 100);
+        Food milk2 = new Food("milk2",
+                LocalDate.of(2021, 8, 16),
+                LocalDate.of(2021, 10, 15), 80);
+        Food milk3 = new Food("mil3",
+                LocalDate.of(2020, 12, 1),
+                LocalDate.of(2021, 9, 10), 50);
+        List<Food> foods = List.of(milk1, milk2, milk3);
 
-
-    /**
-     * Check that the good added in the wrong store
-     * Actually added in the Warehouse, test trash
-     */
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void whenSeveralProducts() {
-        Food milk = new Food(
-                "Milk Parmalat",
-                LocalDate.of(2021, 9, 1),
-                LocalDate.of(2022, 10, 10),
-                100);
-        Control cq = new ControllQuality();
-        Store expected = cq.exChange(milk);
-        List<Food> goods = expected.getData();
-        Trash trash = Trash.getInstance();
-        assertThat(goods.get(0), is(trash.getData().get(0)));
-        trash.clear();
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
+        List<Store> stores = List.of(
+                warehouse, shop, trash
+        );
+        ControllQuality control = new ControllQuality(stores, foods);
+        assertThat(warehouse.getData().get(0), is(milk1));
+        assertThat(shop.getData().get(0), is(milk2));
+        assertThat(trash.getData().get(0), is(milk3));
     }
 
     @Test
-    public void whenAddASeveralProducts() {
-        Food milkTrash = new Food(
-                "Milk 1",
-                LocalDate.of(2021, 9, 1),
-                LocalDate.of(2021, 9, 5),
-                100);
+    public void whenGoodsDividedIntoOneStore() {
+        Food milk1 = new Food("milk1",
+                LocalDate.of(2020, 9, 10),
+                LocalDate.of(2021, 1, 1), 100);
+        Food milk2 = new Food("milk2",
+                LocalDate.of(2020, 8, 16),
+                LocalDate.of(2021, 1, 1), 80);
+        Food milk3 = new Food("mil3",
+                LocalDate.of(2020, 12, 1),
+                LocalDate.of(2021, 1, 1), 50);
+        List<Food> foods = List.of(milk1, milk2, milk3);
 
-        Food milkWarehouse = new Food(
-                "Milk 2",
-                LocalDate.of(2021, 9, 1),
-                LocalDate.of(2022, 9, 25),
-                110);
-
-        Food milkShop = new Food(
-                "Milk 3",
-                LocalDate.of(2021, 9, 1),
-                LocalDate.of(2021, 9, 20),
-                110);
-        Control cq = new ControllQuality();
-        Store expected1 = cq.exChange(milkTrash);
-        Store expected2 = cq.exChange(milkWarehouse);
-        Store expected3 = cq.exChange(milkShop);
-        Store trash = Trash.getInstance();
-        Store warehouse = Warehouse.getInstance();
-        Store shop = Shop.getInstance();
-        assertThat(expected1.getData().get(0), is(trash.getData().get(0)));
-        assertThat(expected2.getData().get(0), is(warehouse.getData().get(0)));
-        assertThat(expected3.getData().get(0), is(shop.getData().get(0)));
-        trash.clear();
-        warehouse.clear();
-        shop.clear();
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
+        List<Store> stores = List.of(
+                warehouse, shop, trash
+        );
+        ControllQuality control = new ControllQuality(stores, foods);
+        assertThat(trash.getData().get(0), is(milk1));
+        assertThat(trash.getData().get(1), is(milk2));
+        assertThat(trash.getData().get(2), is(milk3));
+        assertTrue(warehouse.getData().isEmpty());
+        assertTrue(shop.getData().isEmpty());
     }
 }

@@ -15,7 +15,7 @@ public class Food {
     private float price;
     private float discount;
 
-    public Food(String name, LocalDate expiryDate, LocalDate createDate, int price) {
+    public Food(String name, LocalDate createDate, LocalDate expiryDate, int price) {
         this.name = name;
         this.expiryDate = expiryDate;
         this.createDate = createDate;

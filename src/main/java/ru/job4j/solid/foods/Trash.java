@@ -4,24 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * apply Singleton template
+ * store
  */
 
 public class Trash implements  Store {
 
     private final List<Food> goods = new ArrayList<>();
 
-    private static Trash instance = null;
+    public Trash() {
 
-    public static Trash getInstance() {
-        if (instance == null) {
-            instance = new Trash();
-        }
-        return instance;
     }
 
-    private Trash() {
-
+    @Override
+    public boolean accept(Food food) {
+        DateCompare dc = new DateCompare();
+        float percent = dc.dateCompare(food.getCreateDate(), food.getExpiryDate());
+        if (percent >= 100.0) {
+            return true;
+        }
+        return false;
     }
 
     @Override

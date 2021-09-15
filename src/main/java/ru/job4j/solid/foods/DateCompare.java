@@ -11,9 +11,9 @@ import java.time.ZonedDateTime;
 public class DateCompare implements ParseDatePercent {
 
     @Override
-    public float dateCompare(LocalDate ld1, LocalDate ld2) {
-        ZonedDateTime zoneDateTime1 = ld1.atStartOfDay(ZoneId.of("Europe/Moscow"));
-        ZonedDateTime zoneDateTime2 = ld2.atStartOfDay(ZoneId.of("Europe/Moscow"));
+    public float dateCompare(LocalDate st, LocalDate fn) {
+        ZonedDateTime zoneDateTime1 = st.atStartOfDay(ZoneId.of("Europe/Moscow"));
+        ZonedDateTime zoneDateTime2 = fn.atStartOfDay(ZoneId.of("Europe/Moscow"));
         long start = zoneDateTime1.toInstant().toEpochMilli() / 1000;
         long finish = zoneDateTime2.toInstant().toEpochMilli() / 1000;
         ZonedDateTime zoneDateTim0 = LocalDate.now().atStartOfDay(ZoneId.of("Europe/Moscow"));

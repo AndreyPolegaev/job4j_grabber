@@ -1,30 +1,30 @@
 package ru.job4j.solid.foods;
 
+import java.util.List;
+
+/**
+ * Automatically splits into stores
+ */
 
 public class ControllQuality implements Control {
 
-    private Store store;
+    private final List<Store> stores;
 
-    /**
-     * exChange method takes Food then checks according to data parameters and then divides into 3 stores automatically
-     * also applies discount for 75 - 100 % diapason
-     */
+    private final List<Food> foods;
 
-    @Override
-    public Store exChange(Food food) {
-        DateCompare dc = new DateCompare();
-        float percent = dc.dateCompare(food.getExpiryDate(), food.getCreateDate());
-        if (percent >= 0.0 && percent < 25.0) {
-            store = Warehouse.getInstance();
-        } else if (percent >= 25.0 && percent < 75.0) {
-            store = Shop.getInstance();
-        } else if (percent >= 75.0 && percent < 100.0) {
-            food.setDiscount(0.5f);
-            store = Shop.getInstance();
-        } else if (percent >= 100.0) {
-            store = Trash.getInstance();
+    public ControllQuality(List<Store> stores, List<Food> foods) {
+        this.stores = stores;
+        this.foods = foods;
+        exChange();
+    }
+
+    public void exChange() {
+        for (Store temp : stores) {
+            for (Food tempFood : foods) {
+                if (temp.accept(tempFood)) {
+                    temp.add(tempFood);
+                }
+            }
         }
-        store.add(food);
-        return store;
     }
 }

@@ -4,26 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * apply Singleton template
+ * store
  */
 
 public class Shop implements Store {
 
     private final List<Food> goods = new ArrayList<>();
 
-    private static Shop instance = null;
+    public Shop() {
 
-    public static Shop getInstance() {
-        if (instance == null) {
-            instance = new Shop();
+    }
+
+    @Override
+    public boolean accept(Food food) {
+        DateCompare dc = new DateCompare();
+        float percent = dc.dateCompare(food.getCreateDate(), food.getExpiryDate());
+        if (percent >= 25.0 && percent < 75.0) {
+            return true;
+        } else if (percent >= 75.0 && percent < 100.0) {
+            food.setDiscount(0.5f);
+            return true;
         }
-        return instance;
+        return false;
     }
-
-    private Shop() {
-
-    }
-
 
     @Override
     public void add(Food food) {
