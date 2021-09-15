@@ -27,8 +27,9 @@ public class Emulator {
 
     public static void main(String[] args) {
         Emulator emulator = new Emulator("D:\\");
-        emulator.load("n.txt");
-        String data = emulator.getData("n.txt");
+        emulator.load("data.txt");
+        String data = emulator.getData("new.txt");
         System.out.println(data);
+
     }
 }

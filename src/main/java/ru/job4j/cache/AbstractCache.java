@@ -6,6 +6,9 @@ import java.util.Map;
 
 public abstract class AbstractCache<K, V> {
 
+    /**
+     * Мапа для работы с Soft ссылками реализация структуры кэш
+     */
     protected final Map<K, SoftReference<V>> cache = new HashMap<>();
 
     public void put(K key, V value) {
@@ -16,8 +19,9 @@ public abstract class AbstractCache<K, V> {
      * Если в мапе нет значения по ключу key, вызываем load(K key) получаем данные из файла
      * и загружаем в мапу
      */
+
     public V get(K key) {
-        if (cache.get(key).get() == null) {
+        if (!cache.containsKey(key)) {
             V loadFile = load(key);
             put(key, loadFile);
         }

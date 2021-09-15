@@ -32,18 +32,4 @@ public class DirFileCache extends AbstractCache<String, String> {
         }
         return data;
     }
-
-    @Override
-    public void put(String key, String value) {
-        super.put(key, value);
-    }
-
-    /**
-     * @param key:  метод принимает ключ - имя файла
-     * @return возвращает из мапы значение
-     */
-    @Override
-    public String get(String key) {
-        return super.get(key);
-    }
 }
