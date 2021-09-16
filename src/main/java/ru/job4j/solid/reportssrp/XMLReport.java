@@ -22,15 +22,14 @@ public class XMLReport implements Report {
 
     @Override
     public String generate(Predicate<Employee> filter) {
+        String xml = "";
         try {
             JAXBContext context = JAXBContext.newInstance(Users.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            String xml = "";
             try (StringWriter writer = new StringWriter()) {
                 marshaller.marshal(new Users(store.findBy(filter)), writer);
                 xml = writer.getBuffer().toString();
-                System.out.println(xml);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -38,7 +37,7 @@ public class XMLReport implements Report {
         } catch (JAXBException jaxbException) {
             jaxbException.printStackTrace();
         }
-        return "";
+        return xml;
     }
 
     @XmlRootElement(name = "employee")
@@ -46,7 +45,6 @@ public class XMLReport implements Report {
     private static class Users {
 
        private List<Employee> users;
-
 
         public Users(List<Employee> users) {
             this.users = users;
@@ -65,13 +63,13 @@ public class XMLReport implements Report {
         }
     }
 
-    public static void main(String[] args) throws JAXBException {
-        Employee em1 = new Employee("name1", Calendar.getInstance(), Calendar.getInstance(), 100.0);
-        Employee em2 = new Employee("name2", Calendar.getInstance(), Calendar.getInstance(), 200.0);
-        MemStore memStore = new MemStore();
-        memStore.add(em1);
-        memStore.add(em2);
-        XMLReport xmlReport = new XMLReport(memStore);
-        xmlReport.generate(el -> true);
-    }
+//    public static void main(String[] args) throws JAXBException {
+//        Employee em1 = new Employee("name1", Calendar.getInstance(), Calendar.getInstance(), 100.0);
+//        Employee em2 = new Employee("name2", Calendar.getInstance(), Calendar.getInstance(), 200.0);
+//        MemStore memStore = new MemStore();
+//        memStore.add(em1);
+//        memStore.add(em2);
+//        XMLReport xmlReport = new XMLReport(memStore);
+//        xmlReport.generate(el -> true);
+//    }
 }

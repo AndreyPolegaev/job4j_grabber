@@ -3,6 +3,7 @@ package ru.job4j.solid.reportssrp;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Calendar;
@@ -142,5 +143,55 @@ public class ReportEngineTest {
                 .append("Ivan").append(";")
                 .append(100.0).append(";");
         assertThat(engine.generate(em -> true), is(expect.toString()));
+    }
+
+    @Ignore
+    @Test
+    public void whenXMLReport() {
+        MemStore memStore = new MemStore();
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(2020, 10, 10, 23, 00);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set(2021, 10, 10, 23, 00);
+        Employee em1 = new Employee("name1", calendar1, calendar2, 100.0);
+        Employee em2 = new Employee("name2", calendar1, calendar2, 200.0);
+        memStore.add(em1);
+        memStore.add(em2);
+        Report xmlReport = new XMLReport(memStore);
+        String result = xmlReport.generate(el -> true);
+        String r = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
+                "<employee>\n" +
+                "    <users>\n" +
+                "        <fired>" + calendar1.getTime() + "</fired>\n" +
+                "        <hired>" + calendar2.getTime() + "</hired>\n" +
+                "        <name>name1</name>\n" +
+                "        <salary>100.0</salary>\n" +
+                "    </users>\n" +
+                "    <users>\n" +
+                "       <fired>" + calendar1.getTime() + "</fired>\n" +
+                "        <hired>" + calendar2.getTime() + "</hired>\n" +
+                "        <name>name2</name>\n" +
+                "        <salary>200.0</salary>\n" +
+                "    </users>\n" +
+                "</employee>";
+        assertThat(result, is(r));
+    }
+
+    @Ignore
+    @Test
+    public void whenJSONReport() {
+        MemStore memStore = new MemStore();
+        Calendar calendar1 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        calendar1.set(2020, 10, 10, 23, 00);
+        calendar2.set(2021, 10, 10, 23, 00);
+        Employee em1 = new Employee("name1", calendar1, calendar2, 100.0);
+        Employee em2 = new Employee("name2", calendar1, calendar2, 200.0);
+        memStore.add(em1);
+        memStore.add(em2);
+        Report jsonReport = new JsonReport(memStore);
+        String result = jsonReport.generate(el -> true);
+        String rsl = "[{\"name\":\"name1\",\"hired\":{\"year\":2021,\"month\":8,\"dayOfMonth\":16,\"hourOfDay\":11,\"minute\":40,\"second\":23},\"fired\":{\"year\":2021,\"month\":8,\"dayOfMonth\":16,\"hourOfDay\":11,\"minute\":40,\"second\":23},\"salary\":100.0},{\"name\":\"name2\",\"hired\":{\"year\":2021,\"month\":8,\"dayOfMonth\":16,\"hourOfDay\":11,\"minute\":40,\"second\":23},\"fired\":{\"year\":2021,\"month\":8,\"dayOfMonth\":16,\"hourOfDay\":11,\"minute\":40,\"second\":23},\"salary\":200.0}]";
+        assertThat(result, is(rsl));
     }
 }
