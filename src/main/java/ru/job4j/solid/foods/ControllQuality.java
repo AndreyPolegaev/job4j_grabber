@@ -10,21 +10,34 @@ public class ControllQuality implements Control {
 
     private final List<Store> stores;
 
-    private final List<Food> foods;
-
-    public ControllQuality(List<Store> stores, List<Food> foods) {
+    public ControllQuality(List<Store> stores) {
         this.stores = stores;
-        this.foods = foods;
-        exChange();
     }
 
-    public void exChange() {
+    @Override
+    public void sort(List<Food> foods) {
         for (Store temp : stores) {
             for (Food tempFood : foods) {
                 if (temp.accept(tempFood)) {
                     temp.add(tempFood);
                 }
             }
+        }
+    }
+
+    @Override
+    public void sort(Food food) {
+        for (Store temp : stores) {
+            if (temp.accept(food)) {
+                temp.add(food);
+            }
+        }
+    }
+
+    @Override
+    public void reSort() {
+        for (Store temp : stores) {
+            sort(temp.getData());
         }
     }
 }
