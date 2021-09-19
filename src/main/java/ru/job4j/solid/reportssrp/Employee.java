@@ -74,11 +74,14 @@ public class Employee {
             return false;
         }
         Employee employee = (Employee) o;
-        return Objects.equals(name, employee.name);
+        return Double.compare(employee.salary, salary) == 0
+                && Objects.equals(name, employee.name)
+                && Objects.equals(hired, employee.hired)
+                && Objects.equals(fired, employee.fired);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, hired, fired, salary);
     }
 }
