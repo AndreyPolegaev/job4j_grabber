@@ -2,14 +2,8 @@ package ru.job4j.solid.reportssrp;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -152,7 +146,6 @@ public class ReportEngineTest {
         assertThat(engine.generate(em -> true), is(expect.toString()));
     }
 
-
     @Test
     public void whenXMLReport() {
         MemStore memStore = new MemStore();
@@ -166,12 +159,9 @@ public class ReportEngineTest {
         memStore.add(em2);
         Report xmlReport = new XMLReport(memStore);
         String result = xmlReport.generate(el -> true);
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS+03:00");
         LocalDateTime localDateTime = LocalDateTime.ofInstant(calendar1.toInstant(), ZoneId.systemDefault());
         LocalDateTime localDateTime2 = LocalDateTime.ofInstant(calendar2.toInstant(), ZoneId.systemDefault());
-
-
         String r = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
                 + "<employee>\n"
                 + "    <users>\n"
@@ -204,11 +194,9 @@ public class ReportEngineTest {
         memStore.add(em2);
         Report jsonReport = new JsonReport(memStore);
         String result = jsonReport.generate(el -> true);
-
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
         LocalDateTime localDateTime = LocalDateTime.ofInstant(calendar1.toInstant(), ZoneId.systemDefault());
         LocalDateTime localDateTime2 = LocalDateTime.ofInstant(calendar2.toInstant(), ZoneId.systemDefault());
-
 //        Gson gson = new GsonBuilder().create();
 //        String data1 = gson.toJson(formatter.format(localDateTime));
 //        String data2 = gson.toJson(formatter.format(localDateTime2));
