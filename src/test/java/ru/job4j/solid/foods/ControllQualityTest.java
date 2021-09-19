@@ -95,4 +95,34 @@ public class ControllQualityTest {
         assertTrue(warehouse.getData().isEmpty());
         assertTrue(shop.getData().isEmpty());
     }
+
+    @Test
+    public void whenResort() {
+        Food milk1 = new Food("milk1",
+                LocalDate.of(2020, 9, 10),
+                LocalDate.of(2021, 1, 1), 100);
+        Food milk2 = new Food("milk2",
+                LocalDate.of(2020, 8, 16),
+                LocalDate.of(2021, 1, 1), 80);
+        Food milk3 = new Food("mil3",
+                LocalDate.of(2020, 12, 1),
+                LocalDate.of(2021, 1, 1), 50);
+
+        List<Food> foods = List.of(milk1, milk2, milk3);
+
+        Store warehouse = new Warehouse();
+        Store shop = new Shop();
+        Store trash = new Trash();
+        List<Store> stores = List.of(
+                warehouse, shop, trash
+        );
+        ControllQuality control = new ControllQuality(stores);
+        control.sort(foods);
+        control.reSort();
+        assertThat(trash.getData().get(0), is(milk1));
+        assertThat(trash.getData().get(1), is(milk2));
+        assertThat(trash.getData().get(2), is(milk3));
+        assertTrue(warehouse.getData().isEmpty());
+        assertTrue(shop.getData().isEmpty());
+    }
 }

@@ -1,5 +1,6 @@
 package ru.job4j.solid.foods;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,13 +17,7 @@ public class ControllQuality implements Control {
 
     @Override
     public void sort(List<Food> foods) {
-        for (Store temp : stores) {
-            foods.forEach(f -> {
-                if (temp.accept(f)) {
-                    temp.add(f);
-                }
-            });
-        }
+            foods.forEach(this::sort);
     }
 
     @Override
@@ -36,8 +31,11 @@ public class ControllQuality implements Control {
 
     @Override
     public void reSort() {
-        for (Store temp : stores) {
-            sort(temp.getData());
-        }
+        List<Food> food = new ArrayList<>();
+        stores.forEach(el -> {
+            food.addAll(el.getData());
+            el.clear();
+        });
+        sort(food);
     }
 }

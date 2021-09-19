@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Trash implements  Store {
 
-    private final List<Food> goods = new ArrayList<>();
+    private  List<Food> goods = new ArrayList<>();
 
     public Trash() {
 
