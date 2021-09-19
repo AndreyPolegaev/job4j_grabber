@@ -17,11 +17,11 @@ public class ControllQuality implements Control {
     @Override
     public void sort(List<Food> foods) {
         for (Store temp : stores) {
-            for (Food tempFood : foods) {
-                if (temp.accept(tempFood)) {
-                    temp.add(tempFood);
+            foods.forEach(f -> {
+                if (temp.accept(f)) {
+                    temp.add(f);
                 }
-            }
+            });
         }
     }
 
