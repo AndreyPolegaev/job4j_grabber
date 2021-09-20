@@ -168,13 +168,13 @@ public class ReportEngineTest {
                 + "        <fired>" + formatter.format(localDateTime2) + "</fired>\n"
                 + "        <hired>" + formatter.format(localDateTime) + "</hired>\n"
                 + "        <name>name1</name>\n"
-                + "        <salary>100.0</salary>\n"
+                + "        <salary>" + em1.getSalary() + "</salary>\n"
                 +  "    </users>\n"
                 + "    <users>\n"
                 + "        <fired>" + formatter.format(localDateTime2) + "</fired>\n"
                 + "        <hired>" + formatter.format(localDateTime) +   "</hired>\n"
                 + "        <name>name2</name>\n"
-                + "        <salary>200.0</salary>\n"
+                + "        <salary>" + em2.getSalary() + "</salary>\n"
                 + "    </users>\n"
                 + "</employee>\n";
         assertThat(result, is(r));
