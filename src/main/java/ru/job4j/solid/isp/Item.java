@@ -1,17 +1,20 @@
 package ru.job4j.solid.isp;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * пункт меню может иметь потомка
  * при создании объекта генерируется уникальный id пункта меню
  */
 
-public class Item {
+public class Item implements Action {
 
     private String name;
 
     private static int generateId = 0;
 
-    private Item child;
+    private List<Item> child = new ArrayList<>();
 
     private int id;
 
@@ -33,23 +36,25 @@ public class Item {
     }
 
     public void addChild(Item child) {
-        this.child = child;
+        this.child.add(child);
     }
 
-    public boolean isEmptyChild() {
-        if (child != null) {
-            return false;
-        }
-        return true;
-    }
-
-    public Item getChild(int separator) {
-        child.setName("-".repeat(separator) + child.getName());
+    public List<Item> getChild() {
         return child;
     }
 
     @Override
     public String toString() {
-        return  name;
+        return name;
+    }
+
+    @Override
+    public void action1() {
+
+    }
+
+    @Override
+    public void action2() {
+
     }
 }
