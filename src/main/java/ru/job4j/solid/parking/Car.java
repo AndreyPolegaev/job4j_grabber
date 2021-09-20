@@ -1,12 +1,6 @@
 package ru.job4j.solid.parking;
 
-/**
- * метод checkSize() - реализует полиморфизм на размер автомобилей.
- */
+public abstract class Car {
 
-public interface Car {
-
-    void checkSize();
-
-    int getSize();
+    public abstract int getSize();
 }

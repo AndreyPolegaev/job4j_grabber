@@ -15,12 +15,8 @@ public class Park implements Parking {
     }
 
     @Override
-    public boolean accept(List<Car> car) {
-        boolean check = false;
-        for (Car temp : car) {
-            check = accept(temp);
-        }
-        return check;
+    public void accept(List<Car> car) {
+       car.forEach(this::accept);
     }
 
     @Override

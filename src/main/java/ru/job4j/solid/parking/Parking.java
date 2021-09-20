@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface Parking {
 
-    boolean accept(List<Car> car);
+    void accept(List<Car> car);
 
     boolean accept(Car car);
 

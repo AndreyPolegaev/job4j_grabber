@@ -15,20 +15,12 @@ public class CarTest {
         assertTrue(true);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void whenAdditionalException() {
-        Parking park = new Park(new Car[0], new Car[1]);
-        Car carLTruck1 = new LightCar(2);
-        park.accept(List.of(carLTruck1));
-        assertTrue(true);
-    }
-
     @Test
     public void whenAddThreeLightCars() {
         Parking park = new Park(new Car[5], new Car[2]);
-        Car carLight1 = new LightCar(1);
-        Car carLight2 = new LightCar(1);
-        Car carLight3 = new LightCar(1);
+        Car carLight1 = new LightCar();
+        Car carLight2 = new LightCar();
+        Car carLight3 = new LightCar();
         park.accept(List.of(carLight1, carLight2, carLight3));
         assertThat(park.getFreePlaceLight(), is(2));
         assertThat(park.getFreePlaceTruck(), is(2));
@@ -37,9 +29,9 @@ public class CarTest {
     @Test
     public void whenAddThreeLightCarsAndOneTruck() {
         Parking park = new Park(new Car[5], new Car[2]);
-        Car carLight1 = new LightCar(1);
-        Car carLight2 = new LightCar(1);
-        Car carLight3 = new LightCar(1);
+        Car carLight1 = new LightCar();
+        Car carLight2 = new LightCar();
+        Car carLight3 = new LightCar();
         Car carLTruck = new TruckCar(2);
         park.accept(List.of(carLight1, carLight2, carLight3, carLTruck));
         assertThat(park.getFreePlaceLight(), is(2));
@@ -49,9 +41,9 @@ public class CarTest {
     @Test
     public void whenAddThreeLightCarsAndOneTruck3() {
         Parking park = new Park(new Car[6], new Car[2]);
-        Car carLight1 = new LightCar(1);
-        Car carLight2 = new LightCar(1);
-        Car carLight3 = new LightCar(1);
+        Car carLight1 = new LightCar();
+        Car carLight2 = new LightCar();
+        Car carLight3 = new LightCar();
         Car carLTruck = new TruckCar(3);
         park.accept(List.of(carLight1, carLight2, carLight3, carLTruck));
         assertThat(park.getFreePlaceLight(), is(3));
@@ -70,8 +62,8 @@ public class CarTest {
     @Test
     public void whenAddTwoLightAndTwoTruck() {
         Parking park = new Park(new Car[4], new Car[5]);
-        Car carLight1 = new LightCar(1);
-        Car carLight2 = new LightCar(1);
+        Car carLight1 = new LightCar();
+        Car carLight2 = new LightCar();
         Car carLTruck1 = new TruckCar(4);
         Car carLTruck2 = new TruckCar(2);
         park.accept(List.of(carLight1, carLight2, carLTruck1, carLTruck2));
@@ -92,9 +84,9 @@ public class CarTest {
     @Test
     public void whenAddListAndSeparatelyCar() {
         Parking park = new Park(new Car[2], new Car[5]);
-        Car carLight1 = new LightCar(1);
+        Car carLight1 = new LightCar();
         Car carLTruck2 = new TruckCar(4);
-        Car carLight2 = new LightCar(1);
+        Car carLight2 = new LightCar();
         park.accept(List.of(carLight1, carLTruck2));
         park.accept(carLight2);
         assertThat(park.getFreePlaceLight(), is(0));
@@ -104,9 +96,9 @@ public class CarTest {
     @Test
     public void whenLightPlacesIsFinished() {
         Parking park = new Park(new Car[2], new Car[5]);
-        Car carLight1 = new LightCar(1);
-        Car carLight2 = new LightCar(1);
-        Car carLight3 = new LightCar(1);
+        Car carLight1 = new LightCar();
+        Car carLight2 = new LightCar();
+        Car carLight3 = new LightCar();
         park.accept(List.of(carLight1, carLight2));
         assertThat(park.getFreePlaceLight(), is(0));
         assertThat(park.getFreePlaceTruck(), is(5));
