@@ -20,6 +20,9 @@ public class Food {
         this.expiryDate = expiryDate;
         this.createDate = createDate;
         this.price = price;
+        if (expiryDate.isBefore(createDate)) {
+            throw new IllegalArgumentException("Срок годности не может быть меньше срока выпуска");
+        }
     }
 
     public String getName() {

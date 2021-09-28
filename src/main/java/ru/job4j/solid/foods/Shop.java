@@ -9,7 +9,7 @@ import java.util.List;
 
 public class Shop implements Store {
 
-    private  List<Food> goods = new ArrayList<>();
+    private final List<Food> goods = new ArrayList<>();
 
     public Shop() {
 

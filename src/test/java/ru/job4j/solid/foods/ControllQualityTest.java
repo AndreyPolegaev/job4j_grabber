@@ -43,17 +43,15 @@ public class ControllQualityTest {
     @Test
     public void whenGoodsDividedIntoThreeStore() {
         Food milk1 = new Food("milk1",
-                LocalDate.of(2021, 9, 10),
-                LocalDate.of(2022, 5, 15), 100);
+                LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()),
+                LocalDate.of(LocalDate.now().getYear() + 1, LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()), 100);
         Food milk2 = new Food("milk2",
-                LocalDate.of(2021, 8, 16),
-                LocalDate.of(2021, 10, 15), 80);
+                LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() - 2, LocalDate.now().getDayOfMonth()),
+                LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() + 2, LocalDate.now().getDayOfMonth()), 100);
         Food milk3 = new Food("mil3",
-                LocalDate.of(2020, 12, 1),
-                LocalDate.of(2021, 9, 10), 50);
-
+                LocalDate.of(LocalDate.now().getYear() - 2, LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()),
+                LocalDate.of(LocalDate.now().getYear() - 1, LocalDate.now().getMonthValue() + 2, LocalDate.now().getDayOfMonth()), 100);
         List<Food> foods = List.of(milk1, milk2, milk3);
-
         Store warehouse = new Warehouse();
         Store shop = new Shop();
         Store trash = new Trash();
@@ -70,17 +68,15 @@ public class ControllQualityTest {
     @Test
     public void whenGoodsDividedIntoOneStore() {
         Food milk1 = new Food("milk1",
-                LocalDate.of(2020, 9, 10),
-                LocalDate.of(2021, 1, 1), 100);
+                LocalDate.of(LocalDate.now().getYear() - 2, LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()),
+                LocalDate.of(LocalDate.now().getYear() - 1, LocalDate.now().getMonthValue() + 2, LocalDate.now().getDayOfMonth()), 100);
         Food milk2 = new Food("milk2",
-                LocalDate.of(2020, 8, 16),
-                LocalDate.of(2021, 1, 1), 80);
+                LocalDate.of(LocalDate.now().getYear() - 2, LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()),
+                LocalDate.of(LocalDate.now().getYear() - 1, LocalDate.now().getMonthValue() + 2, LocalDate.now().getDayOfMonth()), 100);
         Food milk3 = new Food("mil3",
-                LocalDate.of(2020, 12, 1),
-                LocalDate.of(2021, 1, 1), 50);
-
+                LocalDate.of(LocalDate.now().getYear() - 2, LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()),
+                LocalDate.of(LocalDate.now().getYear() - 1, LocalDate.now().getMonthValue() + 2, LocalDate.now().getDayOfMonth()), 100);
         List<Food> foods = List.of(milk1, milk2, milk3);
-
         Store warehouse = new Warehouse();
         Store shop = new Shop();
         Store trash = new Trash();
@@ -96,20 +92,29 @@ public class ControllQualityTest {
         assertTrue(shop.getData().isEmpty());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void whenException() {
+        Food milk1 = new Food("milk1",
+                LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()),
+                LocalDate.of(LocalDate.now().getYear() - 1, LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()), 100);
+    }
+
+    /**
+     * продукиы полежали и вышел срок годности, resort должен доставь все продукты из хранилищ, очистить освобождаемые хранилища
+     * и заново запустить сортировку по хранилищам. Ожидаемое поведение - отправить все в Trash
+     */
     @Test
     public void whenResort() {
         Food milk1 = new Food("milk1",
-                LocalDate.of(2020, 9, 10),
-                LocalDate.of(2021, 1, 1), 100);
+                LocalDate.of(LocalDate.now().getYear() - 1, LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()),
+                LocalDate.of(LocalDate.now().getYear() + 3, LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()), 100);
         Food milk2 = new Food("milk2",
-                LocalDate.of(2020, 8, 16),
-                LocalDate.of(2021, 1, 1), 80);
+                LocalDate.of(LocalDate.now().getYear() - 1, LocalDate.now().getMonthValue() - 2, LocalDate.now().getDayOfMonth()),
+                LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonthValue() + 2, LocalDate.now().getDayOfMonth()), 100);
         Food milk3 = new Food("mil3",
-                LocalDate.of(2020, 12, 1),
-                LocalDate.of(2021, 1, 1), 50);
-
+                LocalDate.of(LocalDate.now().getYear() - 2, LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()),
+                LocalDate.of(LocalDate.now().getYear() - 1, LocalDate.now().getMonthValue() + 2, LocalDate.now().getDayOfMonth()), 100);
         List<Food> foods = List.of(milk1, milk2, milk3);
-
         Store warehouse = new Warehouse();
         Store shop = new Shop();
         Store trash = new Trash();
@@ -118,11 +123,16 @@ public class ControllQualityTest {
         );
         ControllQuality control = new ControllQuality(stores);
         control.sort(foods);
+        warehouse.getData().get(0).setExpiryDate(LocalDate.of(LocalDate.now().getYear() - 1,
+                LocalDate.now().getMonthValue() + 1, LocalDate.now().getDayOfMonth()));
+        shop.getData().get(0).setExpiryDate(LocalDate.of(LocalDate.now().getYear() - 1,
+                LocalDate.now().getMonthValue(), LocalDate.now().getDayOfMonth()));
+
+        trash.getData().get(0).setExpiryDate(LocalDate.of(LocalDate.now().getYear() - 1,
+                LocalDate.now().getMonthValue() - 1, LocalDate.now().getDayOfMonth()));
         control.reSort();
         assertThat(trash.getData().get(0), is(milk1));
         assertThat(trash.getData().get(1), is(milk2));
         assertThat(trash.getData().get(2), is(milk3));
-        assertTrue(warehouse.getData().isEmpty());
-        assertTrue(shop.getData().isEmpty());
     }
 }

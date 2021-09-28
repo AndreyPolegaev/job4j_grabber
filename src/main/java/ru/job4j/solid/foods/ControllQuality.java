@@ -25,6 +25,7 @@ public class ControllQuality implements Control {
         for (Store temp : stores) {
             if (temp.accept(food)) {
                 temp.add(food);
+                break;
             }
         }
     }
