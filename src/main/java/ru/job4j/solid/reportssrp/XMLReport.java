@@ -63,13 +63,13 @@ public class XMLReport implements Report {
         }
     }
 
-//    public static void main(String[] args) throws JAXBException {
-//        Employee em1 = new Employee("name1", Calendar.getInstance(), Calendar.getInstance(), 100.0);
-//        Employee em2 = new Employee("name2", Calendar.getInstance(), Calendar.getInstance(), 200.0);
-//        MemStore memStore = new MemStore();
-//        memStore.add(em1);
-//        memStore.add(em2);
-//        XMLReport xmlReport = new XMLReport(memStore);
-//        xmlReport.generate(el -> true);
-//    }
+    public static void main(String[] args) throws JAXBException {
+        Employee em1 = new Employee("name1", Calendar.getInstance(), Calendar.getInstance(), 100.0);
+        Employee em2 = new Employee("name2", Calendar.getInstance(), Calendar.getInstance(), 200.0);
+        MemStore memStore = new MemStore();
+        memStore.add(em1);
+        memStore.add(em2);
+        XMLReport xmlReport = new XMLReport(memStore);
+        System.out.println(xmlReport.generate(el -> true));
+    }
 }

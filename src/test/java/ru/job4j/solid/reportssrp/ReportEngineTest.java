@@ -2,11 +2,8 @@ package ru.job4j.solid.reportssrp;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.is;
-import org.junit.Ignore;
 import org.junit.Test;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class ReportEngineTest {
@@ -146,62 +143,68 @@ public class ReportEngineTest {
         assertThat(engine.generate(em -> true), is(expect.toString()));
     }
 
-//    @Test
-//    public void whenXMLReport() {
-//        MemStore memStore = new MemStore();
-//        Calendar calendar1 = Calendar.getInstance();
-//       // calendar1.set(2020, 10, 10, 00, 00);
-//        Calendar calendar2 = Calendar.getInstance();
-//       // calendar2.set(2021, 10, 10, 00, 00);
-//        Employee em1 = new Employee("name1", calendar1, calendar2, 100.0);
-//        Employee em2 = new Employee("name2", calendar1, calendar2, 200.0);
-//        memStore.add(em1);
-//        memStore.add(em2);
-//        Report xmlReport = new XMLReport(memStore);
-//        String result = xmlReport.generate(el -> true);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS+03:00");
-//        LocalDateTime localDateTime = LocalDateTime.ofInstant(calendar1.toInstant(), ZoneId.systemDefault());
-//        LocalDateTime localDateTime2 = LocalDateTime.ofInstant(calendar2.toInstant(), ZoneId.systemDefault());
-//        String r = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
-//                + "<employee>\n"
-//                + "    <users>\n"
-//                + "        <fired>" + formatter.format(localDateTime2) + "</fired>\n"
-//                + "        <hired>" + formatter.format(localDateTime) + "</hired>\n"
-//                + "        <name>name1</name>\n"
-//                + "        <salary>" + em1.getSalary() + "</salary>\n"
-//                +  "    </users>\n"
-//                + "    <users>\n"
-//                + "        <fired>" + formatter.format(localDateTime2) + "</fired>\n"
-//                + "        <hired>" + formatter.format(localDateTime) +   "</hired>\n"
-//                + "        <name>name2</name>\n"
-//                + "        <salary>" + em2.getSalary() + "</salary>\n"
-//                + "    </users>\n"
-//                + "</employee>\n";
-//        assertThat(result, is(r));
-//    }
-//
-//    @Ignore
-//    @Test
-//    public void whenJSONReport() {
-//        MemStore memStore = new MemStore();
-//        Calendar calendar1 = Calendar.getInstance();
-//        Calendar calendar2 = Calendar.getInstance();
-////        calendar1.set(2020, 10, 10, 23, 00);
-////        calendar2.set(2021, 10, 10, 23, 00);
-//        Employee em1 = new Employee("name1", calendar1, calendar2, 100.0);
-//        Employee em2 = new Employee("name2", calendar1, calendar2, 200.0);
-//        memStore.add(em1);
-//        memStore.add(em2);
-//        Report jsonReport = new JsonReport(memStore);
-//        String result = jsonReport.generate(el -> true);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-//        LocalDateTime localDateTime = LocalDateTime.ofInstant(calendar1.toInstant(), ZoneId.systemDefault());
-//        LocalDateTime localDateTime2 = LocalDateTime.ofInstant(calendar2.toInstant(), ZoneId.systemDefault());
-////        Gson gson = new GsonBuilder().create();
-////        String data1 = gson.toJson(formatter.format(localDateTime));
-////        String data2 = gson.toJson(formatter.format(localDateTime2));
-//
-//        String rsl = "[{\"name\":\"name1\",\"hired\":{\"year\":2021,\"month\":8,\"dayOfMonth\":16,\"hourOfDay\":11,\"minute\":40,\"second\":23},\"fired\":{\"year\":2021,\"month\":8,\"dayOfMonth\":16,\"hourOfDay\":11,\"minute\":40,\"second\":23},\"salary\":100.0},{\"name\":\"name2\",\"hired\":{\"year\":2021,\"month\":8,\"dayOfMonth\":16,\"hourOfDay\":11,\"minute\":40,\"second\":23},\"fired\":{\"year\":2021,\"month\":8,\"dayOfMonth\":16,\"hourOfDay\":11,\"minute\":40,\"second\":23},\"salary\":200.0}]";
-//        assertThat(result, is(rsl));
-//    }
+    @Test
+    public void whenXMLReport() {
+        MemStore memStore = new MemStore();
+        Calendar calendar1 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        Employee em1 = new Employee("name1", calendar1, calendar2, 100.0);
+        Employee em2 = new Employee("name2", calendar1, calendar2, 200.0);
+        memStore.add(em1);
+        memStore.add(em2);
+        Report xmlReport = new XMLReport(memStore);
+        String result = xmlReport.generate(el -> true);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String r = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<employee>\n"
+                + "    <users>\n"
+                + "        <fired>" + formatter.format(calendar2.getTime()) + "</fired>\n"
+                + "        <hired>" + formatter.format(calendar1.getTime()) + "</hired>\n"
+                + "        <name>name1</name>\n"
+                + "        <salary>" + em1.getSalary() + "</salary>\n"
+                +  "    </users>\n"
+                + "    <users>\n"
+                + "        <fired>" + formatter.format(calendar2.getTime()) + "</fired>\n"
+                + "        <hired>" + formatter.format(calendar1.getTime()) +   "</hired>\n"
+                + "        <name>name2</name>\n"
+                + "        <salary>" + em2.getSalary() + "</salary>\n"
+                + "    </users>\n"
+                + "</employee>\n";
+        assertThat(result, is(r));
+    }
+
+    @Test
+    public void whenJSONReport() {
+        MemStore memStore = new MemStore();
+        Calendar calendar1 = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        calendar1.set(2020, 10, 10, 23, 00, 00);
+        calendar2.set(2021, 10, 10, 23, 00, 00);
+        Employee em1 = new Employee("name1", calendar1, calendar2, 100.0);
+        Employee em2 = new Employee("name2", calendar1, calendar2, 200.0);
+        memStore.add(em1);
+        memStore.add(em2);
+        Report jsonReport = new JsonReport(memStore);
+        String result = jsonReport.generate(el -> true);
+        StringBuilder expect = new StringBuilder()
+                .append("[{")
+                .append("\"name\":\"name1\",")
+                .append("\"hired\":{")
+                .append("\"year\":2020,\"month\":10,\"dayOfMonth\":10,")
+                .append("\"hourOfDay\":23,\"minute\":0,\"second\":0},")
+                .append("\"fired\":{")
+                .append("\"year\":2021,\"month\":10,\"dayOfMonth\":10,")
+                .append("\"hourOfDay\":23,\"minute\":0,\"second\":0},")
+                .append("\"salary\":100.0},")
+                .append("{")
+                .append("\"name\":\"name2\",")
+                .append("\"hired\":{")
+                .append("\"year\":2020,\"month\":10,\"dayOfMonth\":10,")
+                .append("\"hourOfDay\":23,\"minute\":0,\"second\":0},")
+                .append("\"fired\":{")
+                .append("\"year\":2021,\"month\":10,\"dayOfMonth\":10,")
+                .append("\"hourOfDay\":23,\"minute\":0,\"second\":0},")
+                .append("\"salary\":200.0}]");
+        assertThat(result, is(expect.toString()));
+    }
 }

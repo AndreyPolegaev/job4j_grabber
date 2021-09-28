@@ -1,9 +1,7 @@
 package ru.job4j.solid.reportssrp;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -41,6 +39,7 @@ public class Employee {
         this.name = name;
     }
 
+    @XmlJavaTypeAdapter(DateAdapter.class)
     public Calendar getHired() {
         return hired;
     }
@@ -49,6 +48,7 @@ public class Employee {
         this.hired = hired;
     }
 
+    @XmlJavaTypeAdapter(DateAdapter.class)
     public Calendar getFired() {
         return fired;
     }
